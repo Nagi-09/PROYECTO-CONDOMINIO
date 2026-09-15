@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Persona</title>
+</head>
+
+<body>
+
+    <h1>Formulario de Persona</h1>
+
+    <form th:action="@{/personas/guardar}"
+          th:object="${persona}"
+          method="post">
+
+        <input type="hidden" th:field="*{idPersona}">
+
+        <div>
+            <label>Nombres:</label>
+            <input type="text"
+                   th:field="*{nombres}"
+                   required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Apellidos:</label>
+            <input type="text"
+                   th:field="*{apellidos}"
+                   required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>DPI:</label>
+            <input type="text"
+                   th:field="*{dpi}"
+                   required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Teléfono:</label>
+            <input type="text"
+                   th:field="*{telefono}">
+        </div>
+
+        <br>
+
+        <div>
+            <label>Correo:</label>
+            <input type="email"
+                   th:field="*{correo}">
+        </div>
+
+        <br>
+
+        <div>
+            <label>Fecha de nacimiento:</label>
+            <input type="date"
+                   th:field="*{fechaNacimiento}">
+        </div>
+
+        <br>
+
+        <div>
+            <label>Estado:</label>
+
+            <select th:field="*{estado}" required>
+                <option value="true">Activa</option>
+                <option value="false">Inactiva</option>
+            </select>
+        </div>
+
+        <br>
+
+        <button type="submit">
+            Guardar
+        </button>
+
+        <a th:href="@{/personas}">
+            Cancelar
+        </a>
+
+    </form>
+
+</body>
+
+</html>

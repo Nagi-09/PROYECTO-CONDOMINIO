@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Viviendas - Sistema de Condominio</title>
+</head>
+
+<body>
+
+    <h1>Gestión de Viviendas</h1>
+
+    <a th:href="@{/viviendas/nuevo}">
+        Registrar nueva vivienda
+    </a>
+
+    <hr>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Número</th>
+                <th>Bloque</th>
+                <th>Dirección</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:each="vivienda : ${viviendas}">
+
+                <td th:text="${vivienda.idVivienda}"></td>
+
+                <td th:text="${vivienda.numero}"></td>
+
+                <td th:text="${vivienda.bloque}"></td>
+
+                <td th:text="${vivienda.direccion}"></td>
+
+                <td th:text="${vivienda.estado}"></td>
+
+                <td>
+
+                    <a th:href="@{/viviendas/editar/{id}(id=${vivienda.idVivienda})}">
+                        Editar
+                    </a>
+
+                    |
+
+                    <a th:href="@{/viviendas/eliminar/{id}(id=${vivienda.idVivienda})}">
+                        Eliminar
+                    </a>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personas - Sistema de Condominio</title>
+</head>
+
+<body>
+
+    <h1>Gestión de Personas</h1>
+
+    <a th:href="@{/personas/nuevo}">
+        Registrar nueva persona
+    </a>
+
+    <hr>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>DPI</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Fecha de nacimiento</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:each="persona : ${personas}">
+
+                <td th:text="${persona.idPersona}"></td>
+                <td th:text="${persona.nombres}"></td>
+                <td th:text="${persona.apellidos}"></td>
+                <td th:text="${persona.dpi}"></td>
+                <td th:text="${persona.telefono}"></td>
+                <td th:text="${persona.correo}"></td>
+                <td th:text="${persona.fechaNacimiento}"></td>
+
+                <td th:text="${persona.estado ? 'Activa' : 'Inactiva'}"></td>
+
+                <td>
+                    <a th:href="@{/personas/editar/{id}(id=${persona.idPersona})}">
+                        Editar
+                    </a>
+
+                    |
+
+                    <a th:href="@{/personas/eliminar/{id}(id=${persona.idPersona})}">
+                        Eliminar
+                    </a>
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</body>
+
+</html>

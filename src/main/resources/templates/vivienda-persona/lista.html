@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relaciones Vivienda-Persona</title>
+</head>
+
+<body>
+
+    <h1>Relaciones Vivienda - Persona</h1>
+
+    <a th:href="@{/vivienda-persona/nuevo}">
+        Registrar nueva relación
+    </a>
+
+    <hr>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Vivienda</th>
+                <th>Persona</th>
+                <th>Tipo de relación</th>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:each="relacion : ${relaciones}">
+
+                <td th:text="${relacion.idViviendaPersona}"></td>
+
+                <td th:text="${relacion.vivienda.numero + ' - Bloque ' + relacion.vivienda.bloque}">
+                </td>
+
+                <td th:text="${relacion.persona.nombres + ' ' + relacion.persona.apellidos}">
+                </td>
+
+                <td th:text="${relacion.tipoRelacion}"></td>
+
+                <td th:text="${relacion.fechaInicio}"></td>
+
+                <td th:text="${relacion.fechaFin != null ? relacion.fechaFin : 'Sin fecha'}">
+                </td>
+
+                <td th:text="${relacion.estado ? 'Activa' : 'Inactiva'}">
+                </td>
+
+                <td>
+
+                    <a th:href="@{/vivienda-persona/editar/{id}(id=${relacion.idViviendaPersona})}">
+                        Editar
+                    </a>
+
+                    |
+
+                    <a th:href="@{/vivienda-persona/eliminar/{id}(id=${relacion.idViviendaPersona})}">
+                        Eliminar
+                    </a>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</body>
+
+</html>

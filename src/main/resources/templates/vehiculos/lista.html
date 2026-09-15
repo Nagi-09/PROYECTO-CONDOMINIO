@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehículos - Sistema de Condominio</title>
+</head>
+
+<body>
+
+    <h1>Gestión de Vehículos</h1>
+
+    <a th:href="@{/vehiculos/nuevo}">
+        Registrar nuevo vehículo
+    </a>
+
+    <hr>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Vivienda</th>
+                <th>Placa</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Color</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:each="vehiculo : ${vehiculos}">
+
+                <td th:text="${vehiculo.idVehiculo}"></td>
+
+                <td th:text="${vehiculo.vivienda.numero + ' - Bloque ' + vehiculo.vivienda.bloque}">
+                </td>
+
+                <td th:text="${vehiculo.placa}"></td>
+
+                <td th:text="${vehiculo.marca}"></td>
+
+                <td th:text="${vehiculo.modelo}"></td>
+
+                <td th:text="${vehiculo.color}"></td>
+
+                <td th:text="${vehiculo.tipo}"></td>
+
+                <td th:text="${vehiculo.estado ? 'Activo' : 'Inactivo'}">
+                </td>
+
+                <td>
+
+                    <a th:href="@{/vehiculos/editar/{id}(id=${vehiculo.idVehiculo})}">
+                        Editar
+                    </a>
+
+                    |
+
+                    <a th:href="@{/vehiculos/eliminar/{id}(id=${vehiculo.idVehiculo})}">
+                        Eliminar
+                    </a>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</body>
+
+</html>

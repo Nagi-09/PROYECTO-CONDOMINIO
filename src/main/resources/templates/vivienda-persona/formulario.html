@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relación Vivienda - Persona</title>
+</head>
+
+<body>
+
+    <h1>Relación Vivienda - Persona</h1>
+
+    <form th:action="@{/vivienda-persona/guardar}"
+          method="post">
+
+        <input type="hidden"
+               name="idViviendaPersona"
+               th:value="${relacion.idViviendaPersona}">
+
+        <div>
+            <label>Vivienda:</label>
+
+            <select name="viviendaId" required>
+
+                <option value="">
+                    Seleccione una vivienda
+                </option>
+
+                <option th:each="vivienda : ${viviendas}"
+                        th:value="${vivienda.idVivienda}"
+                        th:text="${vivienda.numero + ' - Bloque ' + vivienda.bloque}"
+                        th:selected="${relacion.vivienda != null and relacion.vivienda.idVivienda == vivienda.idVivienda}">
+                </option>
+
+            </select>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Persona:</label>
+
+            <select name="personaId" required>
+
+                <option value="">
+                    Seleccione una persona
+                </option>
+
+                <option th:each="persona : ${personas}"
+                        th:value="${persona.idPersona}"
+                        th:text="${persona.nombres + ' ' + persona.apellidos}"
+                        th:selected="${relacion.persona != null and relacion.persona.idPersona == persona.idPersona}">
+                </option>
+
+            </select>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Tipo de relación:</label>
+
+            <select name="tipoRelacion" required>
+
+                <option value="">
+                    Seleccione
+                </option>
+
+                <option value="Propietario"
+                        th:selected="${relacion.tipoRelacion == 'Propietario'}">
+                    Propietario
+                </option>
+
+                <option value="Residente"
+                        th:selected="${relacion.tipoRelacion == 'Residente'}">
+                    Residente
+                </option>
+
+                <option value="Inquilino"
+                        th:selected="${relacion.tipoRelacion == 'Inquilino'}">
+                    Inquilino
+                </option>
+
+                <option value="Familiar"
+                        th:selected="${relacion.tipoRelacion == 'Familiar'}">
+                    Familiar
+                </option>
+
+            </select>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Fecha de inicio:</label>
+
+            <input type="date"
+                   name="fechaInicio"
+                   th:value="${relacion.fechaInicio}"
+                   required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Fecha de fin:</label>
+
+            <input type="date"
+                   name="fechaFin"
+                   th:value="${relacion.fechaFin}">
+        </div>
+
+        <br>
+
+        <div>
+            <label>Estado:</label>
+
+            <select name="estado" required>
+
+                <option value="true"
+                        th:selected="${relacion.estado == true}">
+                    Activa
+                </option>
+
+                <option value="false"
+                        th:selected="${relacion.estado == false}">
+                    Inactiva
+                </option>
+
+            </select>
+        </div>
+
+        <br>
+
+        <button type="submit">
+            Guardar
+        </button>
+
+        <a th:href="@{/vivienda-persona}">
+            Cancelar
+        </a>
+
+    </form>
+
+</body>
+
+</html>

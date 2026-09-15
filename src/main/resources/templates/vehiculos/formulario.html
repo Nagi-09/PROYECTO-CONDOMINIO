@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Vehículo</title>
+</head>
+
+<body>
+
+    <h1>Formulario de Vehículo</h1>
+
+    <form th:action="@{/vehiculos/guardar}"
+          method="post">
+
+        <input type="hidden"
+               name="idVehiculo"
+               th:value="${vehiculo.idVehiculo}">
+
+        <div>
+            <label>Vivienda:</label>
+
+            <select name="viviendaId" required>
+
+                <option value="">
+                    Seleccione una vivienda
+                </option>
+
+                <option th:each="vivienda : ${viviendas}"
+                        th:value="${vivienda.idVivienda}"
+                        th:text="${vivienda.numero + ' - Bloque ' + vivienda.bloque}"
+                        th:selected="${vehiculo.vivienda != null and vehiculo.vivienda.idVivienda == vivienda.idVivienda}">
+                </option>
+
+            </select>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Placa:</label>
+            <input type="text"
+                   name="placa"
+                   th:value="${vehiculo.placa}"
+                   required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Marca:</label>
+            <input type="text"
+                   name="marca"
+                   th:value="${vehiculo.marca}"
+                   required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Modelo:</label>
+            <input type="text"
+                   name="modelo"
+                   th:value="${vehiculo.modelo}"
+                   required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Color:</label>
+            <input type="text"
+                   name="color"
+                   th:value="${vehiculo.color}"
+                   required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Tipo:</label>
+
+            <select name="tipo" required>
+
+                <option value="">
+                    Seleccione
+                </option>
+
+                <option value="Automóvil"
+                        th:selected="${vehiculo.tipo == 'Automóvil'}">
+                    Automóvil
+                </option>
+
+                <option value="Motocicleta"
+                        th:selected="${vehiculo.tipo == 'Motocicleta'}">
+                    Motocicleta
+                </option>
+
+                <option value="Pickup"
+                        th:selected="${vehiculo.tipo == 'Pickup'}">
+                    Pickup
+                </option>
+
+                <option value="Otro"
+                        th:selected="${vehiculo.tipo == 'Otro'}">
+                    Otro
+                </option>
+
+            </select>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Estado:</label>
+
+            <select name="estado" required>
+
+                <option value="true"
+                        th:selected="${vehiculo.estado == true}">
+                    Activo
+                </option>
+
+                <option value="false"
+                        th:selected="${vehiculo.estado == false}">
+                    Inactivo
+                </option>
+
+            </select>
+        </div>
+
+        <br>
+
+        <button type="submit">
+            Guardar
+        </button>
+
+        <a th:href="@{/vehiculos}">
+            Cancelar
+        </a>
+
+    </form>
+
+</body>
+
+</html>
