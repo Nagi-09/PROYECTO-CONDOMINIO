@@ -41,6 +41,7 @@ public class VehiculoController {
         vehiculo.setEstado(true);
 
         model.addAttribute("vehiculo", vehiculo);
+        model.addAttribute("esNuevo", true);
         model.addAttribute("viviendas", viviendaService.listarTodas());
 
         return "vehiculos/formulario";
@@ -55,7 +56,8 @@ public class VehiculoController {
             @RequestParam String modelo,
             @RequestParam String color,
             @RequestParam String tipo,
-            @RequestParam Boolean estado) {
+            @RequestParam Boolean estado,
+            Model model) {
 
         Vivienda vivienda = viviendaService.buscarPorId(viviendaId)
                 .orElseThrow(() ->
@@ -63,6 +65,39 @@ public class VehiculoController {
                                 "Vivienda no encontrada: " + viviendaId
                         )
                 );
+
+        if (vehiculoService.existeOtraConPlaca(placa, idVehiculo)) {
+
+            model.addAttribute(
+                    "error",
+                    "Esa placa ya está registrada en otro vehículo."
+            );
+            model.addAttribute("vehiculo", vehiculoCon(
+                    idVehiculo, vivienda, placa, marca,
+                    modelo, color, tipo, estado));
+            model.addAttribute("esNuevo", idVehiculo == null);
+            model.addAttribute("viviendas", viviendaService.listarTodas());
+
+            return "vehiculos/formulario";
+        }
+
+        Vehiculo vehiculo = vehiculoCon(
+                idVehiculo, vivienda, placa, marca, modelo, color, tipo, estado);
+
+        vehiculoService.guardar(vehiculo);
+
+        return "redirect:/vehiculos";
+    }
+
+    private Vehiculo vehiculoCon(
+            Integer idVehiculo,
+            Vivienda vivienda,
+            String placa,
+            String marca,
+            String modelo,
+            String color,
+            String tipo,
+            Boolean estado) {
 
         Vehiculo vehiculo = new Vehiculo();
 
@@ -75,9 +110,7 @@ public class VehiculoController {
         vehiculo.setTipo(tipo);
         vehiculo.setEstado(estado);
 
-        vehiculoService.guardar(vehiculo);
-
-        return "redirect:/vehiculos";
+        return vehiculo;
     }
 
     @GetMapping("/editar/{id}")
@@ -93,12 +126,13 @@ public class VehiculoController {
                 );
 
         model.addAttribute("vehiculo", vehiculo);
+        model.addAttribute("esNuevo", false);
         model.addAttribute("viviendas", viviendaService.listarTodas());
 
         return "vehiculos/formulario";
     }
 
-    @GetMapping("/eliminar/{id}")
+    @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id) {
 
         vehiculoService.eliminar(id);

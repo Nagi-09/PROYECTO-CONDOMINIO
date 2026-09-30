@@ -1,60 +1,53 @@
 package com.condominio.sistema.service;
 
 import com.condominio.sistema.model.Vivienda;
-import org.springframework.stereotype.Service;
+import com.condominio.sistema.repository.ViviendaRepository;
 
-import java.util.ArrayList;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ViviendaService {
 
-    // Lista temporal mientras todavía no usamos MySQL
-    private final List<Vivienda> viviendas = new ArrayList<>();
+    private final ViviendaRepository viviendaRepository;
 
-    private Integer siguienteId = 1;
+    public ViviendaService(ViviendaRepository viviendaRepository) {
+        this.viviendaRepository = viviendaRepository;
+    }
 
     public List<Vivienda> listarTodas() {
-        return viviendas;
+        return viviendaRepository.findAll();
+    }
+
+    public List<Vivienda> listarPorEstado(String estado) {
+        return viviendaRepository.findByEstado(estado);
     }
 
     public Optional<Vivienda> buscarPorId(Integer id) {
-        return viviendas.stream()
-                .filter(vivienda -> vivienda.getIdVivienda().equals(id))
-                .findFirst();
+        return viviendaRepository.findById(id);
     }
 
+    @Transactional
     public Vivienda guardar(Vivienda vivienda) {
 
-        // Si no tiene ID, significa que es una vivienda nueva
-        if (vivienda.getIdVivienda() == null) {
-
-            vivienda.setIdVivienda(siguienteId);
-            siguienteId++;
-
-            viviendas.add(vivienda);
-
-        } else {
-
-            // Si ya tiene ID, estamos editando una vivienda existente
-            for (int i = 0; i < viviendas.size(); i++) {
-
-                if (viviendas.get(i).getIdVivienda()
-                        .equals(vivienda.getIdVivienda())) {
-
-                    viviendas.set(i, vivienda);
-                    break;
-                }
-            }
+        if (vivienda.getEstado() == null || vivienda.getEstado().isBlank()) {
+            vivienda.setEstado("Ocupada");
         }
 
-        return vivienda;
+        return viviendaRepository.save(vivienda);
     }
 
+    @Transactional
     public void eliminar(Integer id) {
-        viviendas.removeIf(
-                vivienda -> vivienda.getIdVivienda().equals(id)
-        );
+
+        Vivienda vivienda = buscarPorId(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Vivienda no encontrada: " + id
+                ));
+
+        viviendaRepository.delete(vivienda);
     }
 }

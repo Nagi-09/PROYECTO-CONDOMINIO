@@ -1,0 +1,320 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: #eef2f7;
+    color: #1f2937;
+}
+
+a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Login ---------- */
+
+.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+}
+
+.login-card {
+    width: 340px;
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.login-card h1 {
+    margin: 0 0 4px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.login-card h2 {
+    margin: 0 0 20px;
+    font-size: 15px;
+    font-weight: 400;
+    text-align: center;
+    color: #6b7280;
+}
+
+.login-card label {
+    display: block;
+    margin: 12px 0 4px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.login-card button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 11px;
+    border: 0;
+    border-radius: 6px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.login-card button:hover {
+    background: #1d4ed8;
+}
+
+/* ---------- Barra superior ---------- */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: #1e3a8a;
+    color: #ffffff;
+}
+
+.topbar .marca {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.topbar .sesion {
+    font-size: 14px;
+}
+
+.topbar a {
+    color: #bfdbfe;
+    margin-left: 12px;
+}
+
+/* ---------- Contenedor ---------- */
+
+.contenedor {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 0 20px;
+}
+
+h1.titulo {
+    margin-top: 0;
+}
+
+/* ---------- Tarjetas del dashboard ---------- */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 16px;
+}
+
+.card {
+    display: block;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    text-decoration: none;
+}
+
+.card .numero {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1e3a8a;
+}
+
+.card .etiqueta {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 12px;
+}
+
+/* ---------- Tablas ---------- */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+th {
+    background: #f1f5f9;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #475569;
+}
+
+tr:hover td {
+    background: #f8fafc;
+}
+
+/* ---------- Formularios ---------- */
+
+.formulario {
+    max-width: 520px;
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.formulario label {
+    display: block;
+    margin: 14px 0 4px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.formulario input[type="text"],
+.formulario input[type="password"],
+.formulario input[type="number"],
+.formulario input[type="date"],
+.formulario input[type="email"],
+.formulario select {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.formulario .acciones {
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+button.principal {
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 6px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button.principal:hover {
+    background: #1d4ed8;
+}
+
+/* Enlace con apariencia de botón, para "Registrar nuevo..." */
+a.boton {
+    display: inline-block;
+    padding: 9px 16px;
+    border-radius: 6px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+a.boton:hover {
+    background: #1d4ed8;
+    text-decoration: none;
+}
+
+/* Botón pequeño y discreto para acciones dentro de una tabla */
+.boton-chico {
+    padding: 3px 8px;
+    border: 1px solid #d4d4d8;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #27272a;
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.boton-chico:hover {
+    background: #f4f4f5;
+}
+
+.boton-chico.peligro {
+    border-color: #fecaca;
+    color: #b91c1c;
+}
+
+.boton-chico.peligro:hover {
+    background: #fee2e2;
+}
+
+/* Formulario en línea dentro de una tabla */
+.accion-tabla {
+    display: inline;
+}
+
+/* ---------- Mensajes ---------- */
+
+.error {
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 14px;
+}
+
+.ok {
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 14px;
+}
+
+.acciones-lista {
+    margin: 16px 0;
+}
+
+.badge-fuera {
+    margin-top: 0;
+}

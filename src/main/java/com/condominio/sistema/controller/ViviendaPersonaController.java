@@ -30,7 +30,6 @@ public class ViviendaPersonaController {
             ViviendaPersonaService viviendaPersonaService,
             ViviendaService viviendaService,
             PersonaService personaService) {
-
         this.viviendaPersonaService = viviendaPersonaService;
         this.viviendaService = viviendaService;
         this.personaService = personaService;
@@ -55,8 +54,8 @@ public class ViviendaPersonaController {
         relacion.setFechaInicio(LocalDate.now());
 
         model.addAttribute("relacion", relacion);
-        model.addAttribute("viviendas", viviendaService.listarTodas());
-        model.addAttribute("personas", personaService.listarTodas());
+        model.addAttribute("esNuevo", true);
+        cargarListas(model);
 
         return "vivienda-persona/formulario";
     }
@@ -73,33 +72,48 @@ public class ViviendaPersonaController {
             @RequestParam(required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate fechaFin,
-            @RequestParam Boolean estado) {
-
-        Vivienda vivienda = viviendaService.buscarPorId(viviendaId)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "Vivienda no encontrada: " + viviendaId
-                        )
-                );
-
-        Persona persona = personaService.buscarPorId(personaId)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "Persona no encontrada: " + personaId
-                        )
-                );
+            @RequestParam Boolean estado,
+            Model model) {
 
         ViviendaPersona relacion = new ViviendaPersona();
 
         relacion.setIdViviendaPersona(idViviendaPersona);
-        relacion.setVivienda(vivienda);
-        relacion.setPersona(persona);
         relacion.setTipoRelacion(tipoRelacion);
         relacion.setFechaInicio(fechaInicio);
         relacion.setFechaFin(fechaFin);
         relacion.setEstado(estado);
 
-        viviendaPersonaService.guardar(relacion);
+        try {
+
+            Vivienda vivienda = viviendaService.buscarPorId(viviendaId)
+                    .orElseThrow(() ->
+                            new IllegalArgumentException(
+                                    "Vivienda no encontrada: " + viviendaId
+                            )
+                    );
+
+            Persona persona = personaService.buscarPorId(personaId)
+                    .orElseThrow(() ->
+                            new IllegalArgumentException(
+                                    "Persona no encontrada: " + personaId
+                            )
+                    );
+
+            relacion.setVivienda(vivienda);
+            relacion.setPersona(persona);
+
+            viviendaPersonaService.guardar(relacion);
+
+        } catch (IllegalArgumentException e) {
+
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("relacion", relacion);
+            model.addAttribute("esNuevo", idViviendaPersona == null);
+            model.addAttribute("viviendas", viviendaService.listarTodas());
+            model.addAttribute("personas", personaService.listarTodas());
+
+            return "vivienda-persona/formulario";
+        }
 
         return "redirect:/vivienda-persona";
     }
@@ -118,13 +132,18 @@ public class ViviendaPersonaController {
                         );
 
         model.addAttribute("relacion", relacion);
-        model.addAttribute("viviendas", viviendaService.listarTodas());
-        model.addAttribute("personas", personaService.listarTodas());
+        model.addAttribute("esNuevo", false);
+        cargarListas(model);
 
         return "vivienda-persona/formulario";
     }
 
-    @GetMapping("/eliminar/{id}")
+    private void cargarListas(Model model) {
+        model.addAttribute("viviendas", viviendaService.listarTodas());
+        model.addAttribute("personas", personaService.listarTodas());
+    }
+
+    @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id) {
 
         viviendaPersonaService.eliminar(id);

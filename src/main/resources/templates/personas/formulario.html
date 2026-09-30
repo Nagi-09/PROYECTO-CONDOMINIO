@@ -5,89 +5,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Persona</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
 </head>
 
 <body>
 
-    <h1>Formulario de Persona</h1>
+    <header th:replace="~{fragments/comun :: barra}"></header>
 
-    <form th:action="@{/personas/guardar}"
-          th:object="${persona}"
-          method="post">
+    <main class="contenedor">
 
-        <input type="hidden" th:field="*{idPersona}">
+        <h1 class="titulo">Formulario de Persona</h1>
 
-        <div>
+        <p class="error" th:if="${error}" th:text="${error}"></p>
+
+        <form class="formulario"
+              th:action="@{/personas/guardar}"
+              th:object="${persona}"
+              method="post">
+
+            <input type="hidden" th:field="*{idPersona}">
+
             <label>Nombres:</label>
             <input type="text"
                    th:field="*{nombres}"
+                   maxlength="100"
                    required>
-        </div>
 
-        <br>
-
-        <div>
             <label>Apellidos:</label>
             <input type="text"
                    th:field="*{apellidos}"
+                   maxlength="100"
                    required>
-        </div>
 
-        <br>
-
-        <div>
             <label>DPI:</label>
             <input type="text"
                    th:field="*{dpi}"
+                   maxlength="20"
                    required>
-        </div>
+            <small>No se puede repetir entre personas.</small>
 
-        <br>
-
-        <div>
             <label>Teléfono:</label>
             <input type="text"
-                   th:field="*{telefono}">
-        </div>
+                   th:field="*{telefono}"
+                   maxlength="20">
 
-        <br>
-
-        <div>
             <label>Correo:</label>
             <input type="email"
-                   th:field="*{correo}">
-        </div>
+                   th:field="*{correo}"
+                   maxlength="150">
 
-        <br>
-
-        <div>
             <label>Fecha de nacimiento:</label>
             <input type="date"
                    th:field="*{fechaNacimiento}">
-        </div>
 
-        <br>
-
-        <div>
             <label>Estado:</label>
-
             <select th:field="*{estado}" required>
                 <option value="true">Activa</option>
                 <option value="false">Inactiva</option>
             </select>
-        </div>
 
-        <br>
+            <div class="acciones">
+                <button type="submit" class="principal">Guardar</button>
+                <a th:href="@{/personas}">Cancelar</a>
+            </div>
 
-        <button type="submit">
-            Guardar
-        </button>
+        </form>
 
-        <a th:href="@{/personas}">
-            Cancelar
-        </a>
-
-    </form>
+    </main>
 
 </body>
 

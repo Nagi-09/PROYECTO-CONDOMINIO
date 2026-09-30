@@ -5,19 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relaciones Vivienda-Persona</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
 </head>
 
 <body>
 
-    <h1>Relaciones Vivienda - Persona</h1>
+    <header th:replace="~{fragments/comun :: barra}"></header>
 
-    <a th:href="@{/vivienda-persona/nuevo}">
-        Registrar nueva relación
-    </a>
+    <main class="contenedor">
 
-    <hr>
+    <h1 class="titulo">Relaciones Vivienda - Persona</h1>
 
-    <table border="1">
+    <p class="acciones-lista">
+        <a class="boton" th:href="@{/vivienda-persona/nuevo}">Registrar nueva relación</a>
+    </p>
+
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+    <table>
 
         <thead>
             <tr>
@@ -60,11 +65,15 @@
                         Editar
                     </a>
 
-                    |
-
-                    <a th:href="@{/vivienda-persona/eliminar/{id}(id=${relacion.idViviendaPersona})}">
-                        Eliminar
-                    </a>
+                    <form class="accion-tabla"
+                          th:action="@{/vivienda-persona/eliminar/{id}(id=${relacion.idViviendaPersona})}"
+                          method="post">
+                        <button type="submit"
+                                class="boton-chico peligro"
+                                onclick="return confirm('¿Eliminar esta asignación de vivienda? Esta acción no se puede deshacer.')">
+                            Eliminar
+                        </button>
+                    </form>
 
                 </td>
 
@@ -73,6 +82,8 @@
         </tbody>
 
     </table>
+
+    </main>
 
 </body>
 

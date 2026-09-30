@@ -29,22 +29,41 @@ public class PersonaController {
 
     @GetMapping("/nuevo")
     public String mostrarFormularioNuevo(Model model) {
+
         Persona persona = new Persona();
         persona.setEstado(true);
 
         model.addAttribute("persona", persona);
+        model.addAttribute("esNuevo", true);
 
         return "personas/formulario";
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Persona persona) {
+    public String guardar(@ModelAttribute Persona persona, Model model) {
+
+        if (personaService.existeOtroConDpi(
+                persona.getDpi(), persona.getIdPersona())) {
+
+            model.addAttribute(
+                    "error",
+                    "Ese DPI ya está registrado en otra persona."
+            );
+            model.addAttribute("persona", persona);
+            model.addAttribute("esNuevo", persona.getIdPersona() == null);
+
+            return "personas/formulario";
+        }
+
         personaService.guardar(persona);
+
         return "redirect:/personas";
     }
 
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Integer id, Model model) {
+    public String mostrarFormularioEditar(
+            @PathVariable Integer id,
+            Model model) {
 
         Persona persona = personaService.buscarPorId(id)
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -52,11 +71,12 @@ public class PersonaController {
                 ));
 
         model.addAttribute("persona", persona);
+        model.addAttribute("esNuevo", false);
 
         return "personas/formulario";
     }
 
-    @GetMapping("/eliminar/{id}")
+    @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id) {
         personaService.eliminar(id);
         return "redirect:/personas";

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos - Sistema de Condominio</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+    <header th:replace="~{fragments/comun :: barra}"></header>
+
+    <main class="contenedor">
+
+    <h1 class="titulo">Gestión de Pagos</h1>
+
+    <p class="acciones-lista">
+        <a class="boton" th:href="@{/pagos/nuevo}">Registrar nuevo pago</a>
+    </p>
+
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cuota</th>
+                <th>Monto</th>
+                <th>Fecha de pago</th>
+                <th>Método</th>
+                <th>Referencia</th>
+                <th>Registrado por</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:each="pago : ${pagos}">
+
+                <td th:text="${pago.idPago}"></td>
+
+                <td th:text="${pago.cuota != null
+                        ? pago.cuota.periodo
+                        : '-'}"></td>
+
+                <td th:text="'Q' + ${pago.monto}"></td>
+
+                <td th:text="${pago.fechaPago}"></td>
+
+                <td th:text="${pago.metodoPago}"></td>
+
+                <td th:text="${pago.referencia}"></td>
+
+                <td th:text="${pago.usuario != null
+                        ? pago.usuario.username : '-'}"></td>
+
+                <td th:text="${pago.estado}"></td>
+
+                <td>
+                    <form class="accion-tabla"
+                          th:action="@{/pagos/eliminar/{id}(id=${pago.idPago})}"
+                          method="post">
+                        <button type="submit"
+                                class="boton-chico peligro"
+                                onclick="return confirm('¿Eliminar este pago? El saldo de la cuota volverá a calcularse.')">
+                            Eliminar
+                        </button>
+                    </form>
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</body>
+
+</html>

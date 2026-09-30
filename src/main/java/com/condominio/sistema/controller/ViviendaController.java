@@ -30,17 +30,31 @@ public class ViviendaController {
     @GetMapping("/nuevo")
     public String mostrarFormularioNuevo(Model model) {
         model.addAttribute("vivienda", new Vivienda());
+        model.addAttribute("esNuevo", true);
         return "viviendas/formulario";
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Vivienda vivienda) {
-        viviendaService.guardar(vivienda);
+    public String guardar(@ModelAttribute Vivienda vivienda, Model model) {
+
+        try {
+            viviendaService.guardar(vivienda);
+        } catch (IllegalArgumentException e) {
+
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("vivienda", vivienda);
+            model.addAttribute("esNuevo", vivienda.getIdVivienda() == null);
+
+            return "viviendas/formulario";
+        }
+
         return "redirect:/viviendas";
     }
 
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Integer id, Model model) {
+    public String mostrarFormularioEditar(
+            @PathVariable Integer id,
+            Model model) {
 
         Vivienda vivienda = viviendaService.buscarPorId(id)
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -48,11 +62,12 @@ public class ViviendaController {
                 ));
 
         model.addAttribute("vivienda", vivienda);
+        model.addAttribute("esNuevo", false);
 
         return "viviendas/formulario";
     }
 
-    @GetMapping("/eliminar/{id}")
+    @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id) {
         viviendaService.eliminar(id);
         return "redirect:/viviendas";

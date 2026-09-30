@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Cuota</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+    <header th:replace="~{fragments/comun :: barra}"></header>
+
+    <main class="contenedor">
+
+        <h1>Formulario de Cuota</h1>
+
+        <p class="error" th:if="${error}" th:text="${error}"></p>
+
+        <form th:action="@{/cuotas/guardar}" method="post">
+
+            <input type="hidden" name="idCuota" th:value="${cuota.idCuota}">
+
+            <div>
+                <label>Vivienda:</label>
+
+                <select name="idVivienda" required>
+                    <option value="">Seleccione</option>
+
+                    <option th:each="v : ${viviendas}"
+                            th:value="${v.idVivienda}"
+                            th:selected="${cuota.vivienda != null
+                                    && cuota.vivienda.idVivienda == v.idVivienda}"
+                            th:text="${v.numero + ' (' + v.bloque + ')'}">
+                    </option>
+                </select>
+            </div>
+
+            <br>
+
+            <div>
+                <label>Concepto:</label>
+
+                <select name="idConcepto" required>
+                    <option value="">Seleccione</option>
+
+                    <option th:each="c : ${conceptos}"
+                            th:value="${c.idConcepto}"
+                            th:selected="${cuota.concepto != null
+                                    && cuota.concepto.idConcepto == c.idConcepto}"
+                            th:text="${c.nombre + ' (base Q' + c.montoBase
+                                    + ', ' + c.periodicidad + ')'}">
+                    </option>
+                </select>
+            </div>
+
+            <br>
+
+            <div>
+                <label>Periodo:</label>
+                <input type="text"
+                       name="periodo"
+                       th:value="${cuota.periodo}"
+                       placeholder="Ej. Septiembre 2026"
+                       maxlength="20"
+                       required>
+            </div>
+
+            <br>
+
+            <div>
+                <label>Monto:</label>
+                <input type="number"
+                       name="monto"
+                       step="0.01"
+                       min="0"
+                       th:value="${cuota.monto}"
+                       required>
+            </div>
+
+            <br>
+
+            <div>
+                <label>Fecha de emisión:</label>
+                <input type="date"
+                       name="fechaEmision"
+                       th:value="${cuota.fechaEmision}"
+                       required>
+            </div>
+
+            <br>
+
+            <div>
+                <label>Fecha de vencimiento:</label>
+                <input type="date"
+                       name="fechaVencimiento"
+                       th:value="${cuota.fechaVencimiento}"
+                       required>
+            </div>
+
+            <br>
+
+            <div>
+                <label>Estado:</label>
+
+                <select name="estado">
+                    <option th:each="e : ${estados}"
+                            th:value="${e}"
+                            th:text="${e}"
+                            th:selected="${cuota.estado == e}">
+                    </option>
+                </select>
+            </div>
+
+            <br>
+
+            <p th:if="${!esNuevo}">
+                <small>
+                    Lo pagado (Q<span th:text="${cuota.montoPagado}"></span>)
+                    y el saldo se calculan con los pagos registrados,
+                    no se escriben a mano.
+                </small>
+            </p>
+
+            <br>
+
+            <button type="submit">Guardar</button>
+
+            <a th:href="@{/cuotas}">Cancelar</a>
+
+        </form>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,58 +1,73 @@
 package com.condominio.sistema.service;
 
 import com.condominio.sistema.model.Vehiculo;
-import org.springframework.stereotype.Service;
+import com.condominio.sistema.repository.VehiculoRepository;
 
-import java.util.ArrayList;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class VehiculoService {
 
-    private final List<Vehiculo> vehiculos = new ArrayList<>();
+    private final VehiculoRepository vehiculoRepository;
 
-    private Integer siguienteId = 1;
+    public VehiculoService(VehiculoRepository vehiculoRepository) {
+        this.vehiculoRepository = vehiculoRepository;
+    }
 
     public List<Vehiculo> listarTodos() {
-        return vehiculos;
+        return vehiculoRepository.findAll();
+    }
+
+    public List<Vehiculo> listarPorVivienda(Integer idVivienda) {
+        return vehiculoRepository
+                .findByVivienda_IdViviendaOrderByIdVehiculo(idVivienda);
     }
 
     public Optional<Vehiculo> buscarPorId(Integer id) {
-        return vehiculos.stream()
-                .filter(vehiculo -> vehiculo.getIdVehiculo().equals(id))
-                .findFirst();
+        return vehiculoRepository.findById(id);
     }
 
-    public Vehiculo guardar(Vehiculo vehiculo) {
+    public Optional<Vehiculo> buscarPorPlaca(String placa) {
+        return vehiculoRepository.findByPlacaIgnoreCase(placa);
+    }
 
-        if (vehiculo.getIdVehiculo() == null) {
+    /**
+     * La placa es única en la base de datos. Al editar hay que ignorar la
+     * placa que ya tenía el mismo vehículo, si no siempre daría repetida.
+     */
+    public boolean existeOtraConPlaca(String placa, Integer idVehiculo) {
 
-            vehiculo.setIdVehiculo(siguienteId);
-            siguienteId++;
-
-            vehiculos.add(vehiculo);
-
-        } else {
-
-            for (int i = 0; i < vehiculos.size(); i++) {
-
-                if (vehiculos.get(i)
-                        .getIdVehiculo()
-                        .equals(vehiculo.getIdVehiculo())) {
-
-                    vehiculos.set(i, vehiculo);
-                    break;
-                }
-            }
+        if (placa == null || placa.isBlank()) {
+            return false;
         }
 
-        return vehiculo;
+        return vehiculoRepository.findByPlacaIgnoreCase(placa)
+                .filter(vehiculo -> !vehiculo.getIdVehiculo().equals(idVehiculo))
+                .isPresent();
     }
 
+    @Transactional
+    public Vehiculo guardar(Vehiculo vehiculo) {
+
+        if (vehiculo.getEstado() == null) {
+            vehiculo.setEstado(Boolean.TRUE);
+        }
+
+        return vehiculoRepository.save(vehiculo);
+    }
+
+    @Transactional
     public void eliminar(Integer id) {
-        vehiculos.removeIf(
-                vehiculo -> vehiculo.getIdVehiculo().equals(id)
-        );
+
+        Vehiculo vehiculo = buscarPorId(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Vehículo no encontrado: " + id
+                ));
+
+        vehiculoRepository.delete(vehiculo);
     }
 }

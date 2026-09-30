@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones - Sistema de Condominio</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+    <header th:replace="~{fragments/comun :: barra}"></header>
+
+    <main class="contenedor">
+
+        <h1 class="titulo">Notificaciones</h1>
+
+        <p th:if="${pendientes > 0}">
+            <span class="badge badge-fuera"
+                  th:text="${pendientes} + ' sin atender'"></span>
+        </p>
+
+        <p th:if="${error}" class="error" th:text="${error}"></p>
+
+        <p th:if="${#lists.isEmpty(notificaciones)}">
+            No hay notificaciones registradas.
+        </p>
+
+        <table th:unless="${#lists.isEmpty(notificaciones)}">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Mensaje</th>
+                    <th>Publicada</th>
+                    <th>Atendida</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr th:each="notificacion : ${notificaciones}">
+
+                    <td th:text="${notificacion.idNotificacion}"></td>
+
+                    <td th:text="${notificacion.usuario != null
+                            ? notificacion.usuario.nombreCompleto
+                            : '-'}"></td>
+
+                    <td th:text="${notificacion.titulo}"></td>
+
+                    <td th:text="${notificacion.tipo}"></td>
+
+                    <td th:text="${notificacion.mensaje}"></td>
+
+                    <td th:text="${notificacion.fechaPublicacion}"></td>
+
+                    <td th:text="${notificacion.estaAtendida()
+                            ? 'Sí' : 'No'}"></td>
+
+                    <td>
+                        <form class="accion-tabla"
+                              th:unless="${notificacion.estaAtendida()}"
+                              th:action="@{/notificaciones/atender/{id}(id=${notificacion.idNotificacion})}"
+                              method="post">
+                            <button type="submit" class="boton-chico">
+                                Marcar atendida
+                            </button>
+                        </form>
+
+                        <span th:if="${notificacion.estaAtendida()}"
+                              class="badge">
+                            Atendida
+                        </span>
+
+                        <form class="accion-tabla"
+                              th:action="@{/notificaciones/eliminar/{id}(id=${notificacion.idNotificacion})}"
+                              method="post">
+                            <button type="submit"
+                                    class="boton-chico peligro"
+                                    onclick="return confirm('¿Eliminar esta notificación? Esta acción no se puede deshacer.')">
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </main>
+
+</body>
+
+</html>

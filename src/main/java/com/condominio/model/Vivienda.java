@@ -26,7 +26,7 @@ public class Vivienda {
     private String direccion;
 
     @Column(name = "estado", length = 30)
-    private String estado;
+    private String estado = "Ocupada";
 
     public Vivienda() {
     }

@@ -1,60 +1,64 @@
 package com.condominio.sistema.service;
 
 import com.condominio.sistema.model.ViviendaPersona;
-import org.springframework.stereotype.Service;
+import com.condominio.sistema.repository.ViviendaPersonaRepository;
 
-import java.util.ArrayList;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ViviendaPersonaService {
 
-    private final List<ViviendaPersona> relaciones = new ArrayList<>();
+    private final ViviendaPersonaRepository viviendaPersonaRepository;
 
-    private Integer siguienteId = 1;
+    public ViviendaPersonaService(
+            ViviendaPersonaRepository viviendaPersonaRepository) {
+        this.viviendaPersonaRepository = viviendaPersonaRepository;
+    }
 
     public List<ViviendaPersona> listarTodas() {
-        return relaciones;
+        return viviendaPersonaRepository.findAll();
     }
 
     public Optional<ViviendaPersona> buscarPorId(Integer id) {
-        return relaciones.stream()
-                .filter(relacion ->
-                        relacion.getIdViviendaPersona().equals(id))
-                .findFirst();
+        return viviendaPersonaRepository.findById(id);
     }
 
+    public List<ViviendaPersona> listarPorVivienda(Integer idVivienda) {
+        return viviendaPersonaRepository
+                .findByVivienda_IdViviendaOrderByIdViviendaPersona(idVivienda);
+    }
+
+    public List<ViviendaPersona> listarPorPersona(Integer idPersona) {
+        return viviendaPersonaRepository
+                .findByPersona_IdPersonaOrderByIdViviendaPersona(idPersona);
+    }
+
+    @Transactional
     public ViviendaPersona guardar(ViviendaPersona relacion) {
 
-        if (relacion.getIdViviendaPersona() == null) {
-
-            relacion.setIdViviendaPersona(siguienteId);
-            siguienteId++;
-
-            relaciones.add(relacion);
-
-        } else {
-
-            for (int i = 0; i < relaciones.size(); i++) {
-
-                if (relaciones.get(i)
-                        .getIdViviendaPersona()
-                        .equals(relacion.getIdViviendaPersona())) {
-
-                    relaciones.set(i, relacion);
-                    break;
-                }
-            }
+        if (relacion.getEstado() == null) {
+            relacion.setEstado(Boolean.TRUE);
         }
 
-        return relacion;
+        if (relacion.getFechaInicio() == null) {
+            relacion.setFechaInicio(java.time.LocalDate.now());
+        }
+
+        return viviendaPersonaRepository.save(relacion);
     }
 
+    @Transactional
     public void eliminar(Integer id) {
-        relaciones.removeIf(
-                relacion ->
-                        relacion.getIdViviendaPersona().equals(id)
-        );
+
+        ViviendaPersona relacion = buscarPorId(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Relación no encontrada: " + id
+                ));
+
+        viviendaPersonaRepository.delete(relacion);
     }
 }

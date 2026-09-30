@@ -5,19 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehículos - Sistema de Condominio</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
 </head>
 
 <body>
 
-    <h1>Gestión de Vehículos</h1>
+    <header th:replace="~{fragments/comun :: barra}"></header>
 
-    <a th:href="@{/vehiculos/nuevo}">
-        Registrar nuevo vehículo
-    </a>
+    <main class="contenedor">
 
-    <hr>
+    <h1 class="titulo">Gestión de Vehículos</h1>
 
-    <table border="1">
+    <p class="acciones-lista">
+        <a class="boton" th:href="@{/vehiculos/nuevo}">Registrar nuevo vehículo</a>
+    </p>
+
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+    <table>
 
         <thead>
             <tr>
@@ -61,11 +66,15 @@
                         Editar
                     </a>
 
-                    |
-
-                    <a th:href="@{/vehiculos/eliminar/{id}(id=${vehiculo.idVehiculo})}">
-                        Eliminar
-                    </a>
+                    <form class="accion-tabla"
+                          th:action="@{/vehiculos/eliminar/{id}(id=${vehiculo.idVehiculo})}"
+                          method="post">
+                        <button type="submit"
+                                class="boton-chico peligro"
+                                onclick="return confirm('¿Eliminar este vehículo? Esta acción no se puede deshacer.')">
+                            Eliminar
+                        </button>
+                    </form>
 
                 </td>
 
@@ -74,6 +83,8 @@
         </tbody>
 
     </table>
+
+    </main>
 
 </body>
 

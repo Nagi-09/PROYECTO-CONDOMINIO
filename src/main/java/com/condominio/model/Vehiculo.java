@@ -38,7 +38,7 @@ public class Vehiculo {
     private String tipo;
 
     @Column(name = "estado")
-    private Boolean estado;
+    private Boolean estado = Boolean.TRUE;
 
     public Vehiculo() {
     }

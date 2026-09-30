@@ -32,7 +32,7 @@ public class ViviendaPersona {
     private String tipoRelacion;
 
     @Column(name = "fecha_inicio")
-    private LocalDate fechaInicio;
+    private LocalDate fechaInicio = LocalDate.now();
 
     @Column(name = "fecha_fin")
     private LocalDate fechaFin;

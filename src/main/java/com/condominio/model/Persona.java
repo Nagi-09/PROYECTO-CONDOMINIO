@@ -37,7 +37,7 @@ public class Persona {
     private LocalDate fechaNacimiento;
 
     @Column(name = "estado")
-    private Boolean estado;
+    private Boolean estado = Boolean.TRUE;
 
     public Persona() {
     }

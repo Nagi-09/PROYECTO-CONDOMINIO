@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión - Sistema de Condominio</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body class="login-page">
+
+    <div class="login-card">
+
+        <h1>Sistema de Condominio</h1>
+        <h2>Iniciar sesión</h2>
+
+        <p class="error" th:if="${error}" th:text="${error}"></p>
+
+        <p class="ok" th:if="${param.logout}">
+            Sesión cerrada correctamente.
+        </p>
+
+        <form th:action="@{/login}" method="post">
+
+            <label for="usuario">Usuario</label>
+            <input type="text"
+                   id="usuario"
+                   name="usuario"
+                   th:value="${usuario}"
+                   autocomplete="username"
+                   autofocus
+                   required>
+
+            <label for="clave">Contraseña</label>
+            <input type="password"
+                   id="clave"
+                   name="clave"
+                   autocomplete="current-password"
+                   required>
+
+            <button type="submit">
+                Entrar
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Pago</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+    <header th:replace="~{fragments/comun :: barra}"></header>
+
+    <main class="contenedor">
+
+    <h1 class="titulo">Registrar Pago</h1>
+
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+    <p th:if="${#lists.isEmpty(cuotas)}">
+        No hay cuotas pendientes de pago.
+        <a th:href="@{/cuotas/nuevo}">Registrar una cuota</a>.
+    </p>
+
+    <form th:action="@{/pagos/guardar}"
+          method="post">
+
+        <div>
+            <label>Cuota:</label>
+
+            <select name="idCuota" required>
+                <option value="">Seleccione</option>
+
+                <option th:each="cuota : ${cuotas}"
+                        th:value="${cuota.idCuota}"
+                        th:selected="${cuota.idCuota == cuotaIdSeleccionada}"
+                        th:text="${cuota.periodo
+                                + ' - Q' + cuota.monto
+                                + ' (saldo Q' + cuota.saldoPendiente + ')'}">
+                </option>
+            </select>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Monto:</label>
+            <input type="number"
+                   name="monto"
+                   step="0.01"
+                   min="0.01"
+                   required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Fecha de pago:</label>
+            <input type="datetime-local"
+                   name="fechaPago">
+        </div>
+
+        <br>
+
+        <div>
+            <label>Método de pago:</label>
+
+            <select name="metodoPago" required>
+                <option value="">Seleccione</option>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Transferencia">Transferencia</option>
+                <option value="Tarjeta">Tarjeta</option>
+                <option value="Deposito">Depósito</option>
+            </select>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Referencia:</label>
+            <input type="text"
+                   name="referencia"
+                   placeholder="No. de boleta, transferencia, etc.">
+        </div>
+
+        <br>
+
+        <button type="submit">
+            Guardar
+        </button>
+
+        <a th:href="@{/pagos}">
+            Cancelar
+        </a>
+
+    </form>
+
+    </main>
+
+</body>
+
+</html>

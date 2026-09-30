@@ -4,6 +4,12 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Respaldos de base de datos (no van al repo) ###
+*.bak
+*.mdf
+*.ldf
+condominio
+
 ### STS ###
 .apt_generated
 .classpath
