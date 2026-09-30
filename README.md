@@ -25,7 +25,7 @@ No necesitas MySQL, ni IntelliJ, ni MySQL Workbench.
 ### 1. Clonar
 
 ```bash
-git clone https://github.com/laguirrec1-hash/PROYECTO-CONDOMINIO.git
+git clone https://github.com/Nagi-09/PROYECTO-CONDOMINIO.git
 cd PROYECTO-CONDOMINIO
 ```
 
